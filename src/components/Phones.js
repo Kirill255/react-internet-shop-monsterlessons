@@ -1,6 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { connect } from "react-redux";
 
-const Phones = () => {
+import { fetchPhones } from "../actions";
+
+const Phones = ({ fetchPhones }) => {
+  useEffect(() => {
+    fetchPhones();
+  }, [fetchPhones]);
   return (
     <div>
       <h2>Phones</h2>
@@ -8,4 +14,7 @@ const Phones = () => {
   );
 };
 
-export default Phones;
+export default connect(
+  null,
+  { fetchPhones }
+)(Phones);
