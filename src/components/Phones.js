@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import * as R from "ramda";
 
-import { fetchPhones } from "../actions";
+import { fetchPhones, loadMorePhones } from "../actions";
 import { getPhones } from "../selectors";
 
 // const shortDescription = (desc) => R.take(60, desc);
@@ -32,13 +32,20 @@ const renderPhone = (phone, index) => (
   </div>
 );
 
-const Phones = ({ fetchPhones, phones }) => {
+const Phones = ({ fetchPhones, loadMorePhones, phones }) => {
   useEffect(() => {
     fetchPhones();
   }, [fetchPhones]);
   return (
     <div>
       <div className="books row">{phones.map((phone, index) => renderPhone(phone, index))}</div>
+      <div className="row">
+        <div className="col-md-12">
+          <button className="pull-right btn btn-primary" type="button" onClick={loadMorePhones}>
+            Load More
+          </button>
+        </div>
+      </div>
     </div>
   );
 };
@@ -47,5 +54,5 @@ export default connect(
   (state) => ({
     phones: getPhones(state)
   }),
-  { fetchPhones }
+  { fetchPhones, loadMorePhones }
 )(Phones);

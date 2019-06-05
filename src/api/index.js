@@ -6,3 +6,10 @@ export const fetchPhones = async () => {
     resolve(phones);
   });
 };
+
+// fake request, в реальности же offset добавляется к url и запрашивает следующие товары
+export const loadMorePhones = async ({ offset }) => {
+  return new Promise((resolve) => {
+    resolve(phones);
+  });
+};
