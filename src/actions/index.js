@@ -4,9 +4,16 @@ import {
   FETCH_PHONES_FAIL,
   LOAD_MORE_PHONES_START,
   LOAD_MORE_PHONES_SUCCESS,
-  LOAD_MORE_PHONES_FAIL
+  LOAD_MORE_PHONES_FAIL,
+  FETCH_PHONE_BY_ID_START,
+  FETCH_PHONE_BY_ID_SUCCESS,
+  FETCH_PHONE_BY_ID_FAIL
 } from "../constants";
-import { fetchPhones as fetchPhonesApi, loadMorePhones as loadMorePhonesApi } from "../api";
+import {
+  fetchPhones as fetchPhonesApi,
+  loadMorePhones as loadMorePhonesApi,
+  fetchPhoneById as fetchPhoneByIdApi
+} from "../api";
 import { getRenderedPhonesLength } from "../selectors";
 
 // thunk
@@ -30,5 +37,16 @@ export const loadMorePhones = () => async (dispatch, getState) => {
     dispatch({ type: LOAD_MORE_PHONES_SUCCESS, payload: phones });
   } catch (err) {
     dispatch({ type: LOAD_MORE_PHONES_FAIL, payload: err, error: true });
+  }
+};
+
+export const fetchPhoneById = (id) => async (dispatch, getState) => {
+  dispatch({ type: FETCH_PHONE_BY_ID_START });
+
+  try {
+    const phone = await fetchPhoneByIdApi(id);
+    dispatch({ type: FETCH_PHONE_BY_ID_SUCCESS, payload: phone });
+  } catch (err) {
+    dispatch({ type: FETCH_PHONE_BY_ID_FAIL, payload: err, error: true });
   }
 };
