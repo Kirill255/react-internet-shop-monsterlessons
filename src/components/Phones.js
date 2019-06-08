@@ -3,13 +3,13 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import * as R from "ramda";
 
-import { fetchPhones, loadMorePhones } from "../actions";
+import { fetchPhones, loadMorePhones, addPhoneToBasket } from "../actions";
 import { getPhones } from "../selectors";
 
 // const shortDescription = (desc) => R.take(60, desc);
 const shortDescription = (desc) => `${R.take(60, desc)}...`;
 
-const renderPhone = (phone, index) => (
+const renderPhone = (phone, index, addPhoneToBasket) => (
   <div key={index} className="col-sm-4 col-lg-4 col-md-4 book-list">
     <div className="thumbnail">
       <img src={phone.image} alt={phone.name} className="img-thumbnail" />
@@ -20,7 +20,11 @@ const renderPhone = (phone, index) => (
         </h4>
         <p>{shortDescription(phone.description)}</p>
         <p className="itemButton">
-          <button className="btn btn-primary" type="button">
+          <button
+            className="btn btn-primary"
+            type="button"
+            onClick={() => addPhoneToBasket(phone.id)}
+          >
             Buy now!
           </button>
           <Link to={`/phones/${phone.id}`} className="btn btn-default">
@@ -32,13 +36,15 @@ const renderPhone = (phone, index) => (
   </div>
 );
 
-const Phones = ({ fetchPhones, loadMorePhones, phones }) => {
+const Phones = ({ fetchPhones, loadMorePhones, addPhoneToBasket, phones }) => {
   useEffect(() => {
     fetchPhones();
   }, [fetchPhones]);
   return (
     <div>
-      <div className="books row">{phones.map((phone, index) => renderPhone(phone, index))}</div>
+      <div className="books row">
+        {phones.map((phone, index) => renderPhone(phone, index, addPhoneToBasket))}
+      </div>
       <div className="row">
         <div className="col-md-12">
           <button className="pull-right btn btn-primary" type="button" onClick={loadMorePhones}>
@@ -54,5 +60,5 @@ export default connect(
   (state) => ({
     phones: getPhones(state)
   }),
-  { fetchPhones, loadMorePhones }
+  { fetchPhones, loadMorePhones, addPhoneToBasket }
 )(Phones);

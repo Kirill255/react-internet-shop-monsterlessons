@@ -1,8 +1,11 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import * as R from "ramda";
+import { Link } from "react-router-dom";
 
-import { fetchPhoneById } from "../actions";
+import BasketCart from "./BasketCart";
+
+import { fetchPhoneById, addPhoneToBasket } from "../actions";
 import { getPhoneById } from "../selectors";
 
 const renderFields = (phone) => {
@@ -41,12 +44,32 @@ const renderContent = (phone) => (
   </div>
 );
 
-const renderSidebar = () => <div>Sidebar</div>;
+const renderSidebar = (phone, addPhoneToBasket) => (
+  <div>
+    <p className="lead">Quick shop</p>
+    <BasketCart />
+    <div className="form-group">
+      <h1>{phone.name}</h1>
+      <h2>$ {phone.price}</h2>
+    </div>
+    <Link to="/" className="btn btn-info btn-block">
+      Back to store
+    </Link>
+    <button
+      type="button"
+      className="btn btn-success btn-block"
+      onClick={() => addPhoneToBasket(phone.id)}
+    >
+      Add to cart
+    </button>
+  </div>
+);
 
 // форматирование пропсов говно -> prettier
 // match приходит из роута
 const Phone = ({
   fetchPhoneById,
+  addPhoneToBasket,
   match: {
     params: { id }
   },
@@ -60,7 +83,7 @@ const Phone = ({
       <div className="container">
         <div className="row">
           <div className="col-md-9">{phone && renderContent(phone)}</div>
-          <div className="col-md-3">{phone && renderSidebar()}</div>
+          <div className="col-md-3">{phone && renderSidebar(phone, addPhoneToBasket)}</div>
         </div>
       </div>
     </div>
@@ -71,5 +94,5 @@ export default connect(
   (state) => ({
     phone: getPhoneById(state, state.phonePage.id)
   }),
-  { fetchPhoneById }
+  { fetchPhoneById, addPhoneToBasket }
 )(Phone);

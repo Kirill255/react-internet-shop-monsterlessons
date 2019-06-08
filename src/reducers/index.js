@@ -5,10 +5,12 @@ import history from "../history";
 import phones from "./phones";
 import phonesPage from "./phonesPage";
 import phonePage from "./phonePage";
+import basket from "./basket";
 
 export default combineReducers({
   router: connectRouter(history),
   phones,
   phonesPage,
-  phonePage
+  phonePage,
+  basket
 });

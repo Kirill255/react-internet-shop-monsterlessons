@@ -8,3 +8,16 @@ export const getPhones = (state) => {
 };
 
 export const getRenderedPhonesLength = (state) => R.length(state.phonesPage.ids);
+
+export const getTotalBasketCount = (state) => R.length(state.basket);
+
+export const getTotalBasketPrice = (state) => {
+  // R.compose выполняет функции справа налево, ну или в этом форматировании снизу вверх
+  const totalPrice = R.compose(
+    R.sum, // суммировали цены
+    R.pluck("price"), // оставили только цены
+    R.map((id) => getPhoneById(state, id)) // получили телефоны
+  )(state.basket);
+
+  return totalPrice;
+};

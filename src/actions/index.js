@@ -7,7 +7,8 @@ import {
   LOAD_MORE_PHONES_FAIL,
   FETCH_PHONE_BY_ID_START,
   FETCH_PHONE_BY_ID_SUCCESS,
-  FETCH_PHONE_BY_ID_FAIL
+  FETCH_PHONE_BY_ID_FAIL,
+  ADD_PHONE_TO_BASKET
 } from "../constants";
 import {
   fetchPhones as fetchPhonesApi,
@@ -49,4 +50,8 @@ export const fetchPhoneById = (id) => async (dispatch, getState) => {
   } catch (err) {
     dispatch({ type: FETCH_PHONE_BY_ID_FAIL, payload: err, error: true });
   }
+};
+
+export const addPhoneToBasket = (id) => (dispatch) => {
+  dispatch({ type: ADD_PHONE_TO_BASKET, payload: id });
 };
