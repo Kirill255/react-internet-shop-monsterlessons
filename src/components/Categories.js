@@ -1,15 +1,27 @@
 import React from "react";
+import { compose } from "redux";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
+import * as R from "ramda";
+import classNames from "classnames";
 
-import { getCategories } from "../selectors";
+import { getCategories, getActiveCategoryId } from "../selectors";
 
-const Categories = ({ categories }) => {
-  const renderCategory = (category, index) => (
-    <Link to={`/categories/${category.id}`} key={index} className="list-group-item">
-      {category.name}
-    </Link>
-  );
+const Categories = ({ categories, activeCategoryId }) => {
+  const renderCategory = (category, index) => {
+    const getActiveState = R.propEq("id", activeCategoryId); // проверяет что category.id === activeCategoryId
+
+    const linkClass = classNames({
+      "list-group-item": true, // всегда true
+      active: getActiveState(category) // true or false
+    });
+
+    return (
+      <Link to={`/categories/${category.id}`} key={index} className={linkClass}>
+        {category.name}
+      </Link>
+    );
+  };
 
   return (
     <div className="well">
@@ -21,6 +33,38 @@ const Categories = ({ categories }) => {
   );
 };
 
-export default connect((state) => ({
-  categories: getCategories(state)
-}))(Categories);
+// export default connect((state) => ({
+//   categories: getCategories(state)
+// }))(Categories);
+
+// https://stackoverflow.com/questions/46485056/withrouter-connect-and-react-compose
+
+// === можно завернуть как в hoc ===
+// export default withRouter(connect(mapStateToProps)(Component))
+
+// export default withRouter(
+//   connect((state) => ({
+//     categories: getCategories(state)
+//   }))(Categories)
+// );
+
+// === можно с compose из redux ===
+// export default compose(
+//   withRouter,
+//   connect(mapStateToProps)
+// )(Component);
+
+// export default compose(
+//   withRouter,
+//   connect((state) => ({
+//     categories: getCategories(state)
+//   }))
+// )(Categories);
+
+export default compose(
+  withRouter,
+  connect((state, ownProps) => ({
+    categories: getCategories(state),
+    activeCategoryId: getActiveCategoryId(ownProps)
+  }))
+)(Categories);

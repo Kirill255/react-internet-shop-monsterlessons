@@ -32,3 +32,5 @@ export const getTotalBasketPrice = (state) => {
 };
 
 export const getCategories = (state) => R.values(state.categories); // R.values берёт все значения из объекта и засовывает в массив
+
+export const getActiveCategoryId = (ownProps) => R.path(["match", "params", "id"], ownProps); // тоже что и ownProps.match.params.id, но R.path проверяет все вложенные свойства в пути на undefined и наш код не сломается, если какого-то свойства не будет
