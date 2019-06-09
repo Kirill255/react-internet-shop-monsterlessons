@@ -23,10 +23,24 @@ const Categories = ({ categories, activeCategoryId }) => {
     );
   };
 
+  const renderAllCategory = () => {
+    const linkClass = classNames({
+      "list-group-item": true,
+      active: R.isNil(activeCategoryId) // active если свойство activeCategoryId пустое, тоесть undefined
+    });
+
+    return (
+      <Link to="/" className={linkClass}>
+        All
+      </Link>
+    );
+  };
+
   return (
     <div className="well">
       <h4>Brand</h4>
       <div className="list-group">
+        {renderAllCategory()}
         {categories.map((category, index) => renderCategory(category, index))}
       </div>
     </div>
