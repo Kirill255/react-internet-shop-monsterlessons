@@ -1,10 +1,18 @@
 import React from "react";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 import * as R from "ramda";
 
 import { getBasketPhonesWithCount, getTotalBasketPrice } from "../selectors";
+import { removePhoneFromBasket, basketCheckout, cleanBasket } from "../actions";
 
-const Basket = ({ phones, totalBasketPrice }) => {
+const Basket = ({
+  phones,
+  totalBasketPrice,
+  removePhoneFromBasket,
+  basketCheckout,
+  cleanBasket
+}) => {
   const isBasketEmpty = R.isEmpty(phones); // пустая корзина или нет
 
   const renderContent = () => (
@@ -23,7 +31,7 @@ const Basket = ({ phones, totalBasketPrice }) => {
                 <td>$ {phone.price}</td>
                 <td>{phone.count}</td>
                 <td>
-                  <span className="delete-cart" />
+                  <span className="delete-cart" onClick={() => removePhoneFromBasket(phone.id)} />
                 </td>
               </tr>
             ))}
@@ -41,7 +49,27 @@ const Basket = ({ phones, totalBasketPrice }) => {
     </div>
   );
 
-  const renderSidebar = () => <div>Sidebar</div>;
+  const renderSidebar = () => (
+    <div>
+      <Link to="/" className="btn btn-info">
+        <span className="glyphicon glyphicon-info-sign" />
+        <span>Continue shopping!</span>
+      </Link>
+
+      {R.not(isBasketEmpty) && (
+        <div>
+          <button type="button" className="btn btn-danger" onClick={cleanBasket}>
+            <span className="glyphicon glyphicon-trash" />
+            Clear cart
+          </button>
+          <button type="button" className="btn btn-success" onClick={() => basketCheckout(phones)}>
+            <span className="glyphicon glyphicon-envelope" />
+            Checkout
+          </button>
+        </div>
+      )}
+    </div>
+  );
 
   return (
     <div className="view-container">
@@ -55,7 +83,10 @@ const Basket = ({ phones, totalBasketPrice }) => {
   );
 };
 
-export default connect((state) => ({
-  phones: getBasketPhonesWithCount(state),
-  totalBasketPrice: getTotalBasketPrice(state)
-}))(Basket);
+export default connect(
+  (state) => ({
+    phones: getBasketPhonesWithCount(state),
+    totalBasketPrice: getTotalBasketPrice(state)
+  }),
+  { removePhoneFromBasket, basketCheckout, cleanBasket }
+)(Basket);

@@ -12,7 +12,9 @@ import {
   SEARCH_PHONE,
   FETCH_CATEGORIES_START,
   FETCH_CATEGORIES_SUCCESS,
-  FETCH_CATEGORIES_FAIL
+  FETCH_CATEGORIES_FAIL,
+  REMOVE_PHONE_FROM_BASKET,
+  CLEAN_BASKET
 } from "../constants";
 import {
   fetchPhones as fetchPhonesApi,
@@ -74,4 +76,17 @@ export const fetchCategories = () => async (dispatch) => {
   } catch (err) {
     dispatch({ type: FETCH_CATEGORIES_FAIL, payload: err, error: true });
   }
+};
+
+export const removePhoneFromBasket = (id) => (dispatch) => {
+  dispatch({ type: REMOVE_PHONE_FROM_BASKET, payload: id });
+};
+
+export const cleanBasket = () => (dispatch) => {
+  dispatch({ type: CLEAN_BASKET });
+};
+
+// fake action, просто выведем заказ в alert
+export const basketCheckout = (phones) => (dispatch) => {
+  alert(JSON.stringify(phones));
 };
