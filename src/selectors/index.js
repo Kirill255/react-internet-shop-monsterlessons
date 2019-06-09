@@ -30,3 +30,5 @@ export const getTotalBasketPrice = (state) => {
 
   return totalPrice;
 };
+
+export const getCategories = (state) => R.values(state.categories); // R.values берёт все значения из объекта и засовывает в массив
