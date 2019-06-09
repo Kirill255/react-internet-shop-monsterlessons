@@ -57,9 +57,10 @@ const Phones = ({ fetchPhones, fetchCategories, loadMorePhones, addPhoneToBasket
   );
 };
 
+// тут ownProps доступны сразу без withRouter (как в Categories компоненте), так как компонент Phones сам по себе является компонентом роутом
 export default connect(
-  (state) => ({
-    phones: getPhones(state)
+  (state, ownProps) => ({
+    phones: getPhones(state, ownProps)
   }),
   { fetchPhones, fetchCategories, loadMorePhones, addPhoneToBasket }
 )(Phones);

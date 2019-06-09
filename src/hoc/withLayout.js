@@ -1,7 +1,7 @@
 import React from "react";
 import Sidebar from "../components/Sidebar";
 
-const withLayout = (Component) => () => (
+const withLayout = (Component) => (props) => (
   <div className="view-container">
     <div className="container">
       <div className="row">
@@ -9,7 +9,7 @@ const withLayout = (Component) => () => (
           <Sidebar />
         </div>
         <div className="col-md-9">
-          <Component />
+          <Component {...props} />
         </div>
       </div>
     </div>
