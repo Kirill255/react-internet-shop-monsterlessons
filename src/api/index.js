@@ -1,13 +1,17 @@
 import * as R from "ramda";
+import request from "superagent";
 
 import phones from "./mockPhones";
 import categories from "./mockCategories";
 
 // fake request
 export const fetchPhones = async () => {
-  return new Promise((resolve) => {
-    resolve(phones);
-  });
+  // return new Promise((resolve) => {
+  //   resolve(phones);
+  // });
+
+  const { body } = await request.get("http://www.mocky.io/v2/5cfd7d203200005600ccd52c");
+  return body.phones;
 };
 
 // fake request, в реальности же offset добавляется к url и запрашивает следующие товары
