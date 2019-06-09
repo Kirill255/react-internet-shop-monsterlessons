@@ -54,3 +54,19 @@ export const getTotalBasketPrice = (state) => {
 export const getCategories = (state) => R.values(state.categories); // R.values берёт все значения из объекта и засовывает в массив
 
 export const getActiveCategoryId = (ownProps) => R.path(["match", "params", "id"], ownProps); // тоже что и ownProps.match.params.id, но R.path проверяет все вложенные свойства в пути на undefined и наш код не сломается, если какого-то свойства не будет
+
+export const getBasketPhonesWithCount = (state) => {
+  const uniqueIds = R.uniq(state.basket); // берём только уникальные ids
+  const phoneCount = (id) =>
+    R.compose(
+      R.length, // берём длину массива, тоесть в нашем случае 2, это и будет кол-во(шт) телефонов
+      R.filter((basketId) => R.equals(id, basketId)) // фильтруем по id, тоесть получаем массив из двух id=1
+    )(state.basket); // сейчас в корзине исходный массив значений, не только уникальные, например два id=1 если мы добавили два телефона с id=1
+  const phoneWithCount = (phone) => R.assoc("count", phoneCount(phone.id), phone); // добавляем поле count
+
+  const phones = R.compose(
+    R.map(phoneWithCount), // добавляем в каждый объект телефона новое поле с кол-вом заказанных штук
+    R.map((id) => getPhoneById(state, id)) // получаем телефоны (объекты)
+  )(uniqueIds);
+  return phones;
+};
