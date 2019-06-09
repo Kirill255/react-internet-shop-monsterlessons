@@ -11,6 +11,7 @@ const App = () => {
     <div>
       <Switch>
         <Route path="/" exact render={withLayout(Phones)} />
+        <Route path="/categories/:id" render={withLayout(Phones)} />
         <Route path="/phones/:id" component={Phone} />
         <Route path="*" render={() => <h1>Not Found Page</h1>} />
       </Switch>
