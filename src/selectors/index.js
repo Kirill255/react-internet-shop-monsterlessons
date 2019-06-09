@@ -3,7 +3,16 @@ import * as R from "ramda";
 export const getPhoneById = (state, id) => R.prop(id, state.phones);
 
 export const getPhones = (state) => {
-  const phones = R.map((id) => getPhoneById(state, id), state.phonesPage.ids);
+  // const phones = R.map((id) => getPhoneById(state, id), state.phonesPage.ids);
+  // return phones;
+
+  // теперь нам нужно дополнительно к map применить ещё и filter(search)
+  const applySearch = (item) => R.contains(state.phonesPage.search, R.prop("name", item)); // ищем искомую подстроку в имени телефона(item)
+  const phones = R.compose(
+    R.filter(applySearch), // фильтруем массив по критерию поиска
+    R.map((id) => getPhoneById(state, id)) // получили массив объектов телефонов
+  )(state.phonesPage.ids); // вот у нас есть айдишники
+
   return phones;
 };
 
